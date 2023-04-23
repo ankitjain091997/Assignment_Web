@@ -28,7 +28,10 @@
             <td>{{ $coustomer->first_name }} {{ $coustomer->last_name }}</td>
             <td>{{ $coustomer->email }}</td>
             <td>{{ $coustomer->mobile }}</td>
-            <td>{{ $coustomer->status }}</td>
+            <td><input data-id="{{$coustomer->id}}" class="toggle-class" type="checkbox" data-onstyle="success"
+                    data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="Deactive" id='status'
+                    value="{{$coustomer->status}}" {{ $coustomer->status ? 'checked' : '' }}> {{$coustomer->status}}
+            </td>
             <td>
                 <form action="{{route('coustomerDelete',$coustomer->id)}}" method="POST" style='display:inline'>
 
@@ -102,5 +105,30 @@ $(document).ready(function() {
         }
     });
 });
+$(function() {
+    $('.toggle-class').change(function() {
+        var status = $(this).prop('checked') == true ? 1 : 0;
+        var user_id = $(this).data('id');
+        var statusOld = $('#status').val();
+        console.log(status);
+        $.ajax({
+            type: "POST",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: "json",
+            url: "{{ url('coustomer/status/') }}",
+            data: {
+                'status': status,
+                'user_id': user_id,
+                'statusOld': statusOld
+            },
+            success: function(data) {
+                location.reload();
+                console.log(data.success)
+            }
+        });
+    })
+})
 </script>
 @endsection

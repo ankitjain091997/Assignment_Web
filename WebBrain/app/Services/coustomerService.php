@@ -27,4 +27,16 @@ class coustomerService
         User::whereIn('id', explode(",", $ids))->delete();
         return response()->json(['status' => true, 'message' => "Customers deleted successfully."]);
     }
+
+    public function coustomerStatus($request)
+    {
+        if ($request->statusOld === 'Deactive') {
+            $request->statusOld = 'Active';
+        } else {
+            $request->statusOld = 'Deactive';
+        }
+        User::whereId($request->user_id)->update(['status' => $request->statusOld]);
+
+        return response()->json(['status' => true, 'message' => "Customers status Update successfully."]);
+    }
 }

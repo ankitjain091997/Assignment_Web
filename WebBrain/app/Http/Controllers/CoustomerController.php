@@ -31,4 +31,9 @@ class CoustomerController extends Controller
     {
         return $this->coustomerService->coustomerMulipleDestroy($request);
     }
+
+    public function coustomerStatus(Request $request)
+    {
+        return $this->coustomerService->coustomerStatus($request);
+    }
 }

@@ -45,6 +45,6 @@ Route::middleware(['admin'])->group(function () {
     Route::get('coustomer/list', [CoustomerController::class, 'coustomerList'])->name('coustomerList');
     Route::delete('coustomer/{id}', [CoustomerController::class, 'coustomerDestroy'])->name('coustomerDelete');
     Route::delete('coustomer/muliple/destroy', [CoustomerController::class, 'coustomerMulipleDestroy'])->name('coustomerMulipleDestroy');
-
+    Route::post('coustomer/status/', [CoustomerController::class, 'coustomerStatus'])->name('coustomerStatus');
     Route::get('post/list', [PostController::class, 'index'])->name('postList');
 });
