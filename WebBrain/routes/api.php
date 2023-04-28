@@ -20,3 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('deleteRecord', [JobsController::class, 'deleteRecord']);
+Route::post('login', [JobsController::class, 'login']);
+
+Route::middleware('auth:sanctum')->prefix('/user')->group(function () {
+    Route::patch('update', [JobsController::class, 'update']);
+});
