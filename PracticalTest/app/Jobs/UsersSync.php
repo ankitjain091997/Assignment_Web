@@ -32,9 +32,29 @@ class UsersSync implements ShouldQueue
      */
     public function handle()
     {
-        $user = User::get(['name', 'email'])->toArray();
-        if ($user) {
-            UserDatas::insertOrIgnore($user);
+        $user = User::with('reseller', 'supplier')->get()->toArray();
+
+
+        $userDataModify =   array_map(function ($item) {
+            if ($item['role_type'] === 'Supplier') {
+                $item['contact_no'] = $item['supplier']['contact_no'];
+                $item['address'] = $item['supplier']['address'];
+            } elseif ($item['role_type'] === 'Reseller') {
+                $item['contact_no'] = $item['reseller']['contact_no'];
+                $item['address'] = $item['reseller']['address'];
+            }
+            $item['role'] = $item['role_type'];
+            unset($item['reseller']);
+            unset($item['supplier']);
+            unset($item['role_type']);
+            unset($item['role_id']);
+            // unset($item['id']);
+
+            return $item;
+        }, $user);
+
+        if ($userDataModify) {
+            UserDatas::insertOrIgnore($userDataModify);
         }
 
         return response()->json(
