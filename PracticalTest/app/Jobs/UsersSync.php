@@ -34,7 +34,8 @@ class UsersSync implements ShouldQueue
     {
         $user = User::with('reseller', 'supplier')->get()->toArray();
 
-
+        $key = 0;
+        $newArray = [];
         $userDataModify =   array_map(function ($item) {
             if ($item['role_type'] === 'Supplier') {
                 $item['contact_no'] = $item['supplier']['contact_no'];
@@ -44,17 +45,20 @@ class UsersSync implements ShouldQueue
                 $item['address'] = $item['reseller']['address'];
             }
             $item['role'] = $item['role_type'];
-            unset($item['reseller']);
-            unset($item['supplier']);
-            unset($item['role_type']);
-            unset($item['role_id']);
-            // unset($item['id']);
-
             return $item;
         }, $user);
 
-        if ($userDataModify) {
-            UserDatas::insertOrIgnore($userDataModify);
+        foreach ($userDataModify as $user) {
+            UserDatas::updateOrInsert(
+                ['email' => $user['email']],
+                [
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                    'role' => $user['role'],
+                    'address' => $user['address'],
+                    'contact_no' => $user['contact_no']
+                ]
+            );
         }
 
         return response()->json(
