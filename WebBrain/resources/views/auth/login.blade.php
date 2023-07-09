@@ -46,7 +46,7 @@
             </div>
         </form>
         <div class="form-group">
-            <a href="{{route('registration')}}" class="btn btn-success">Registration
+            <a href="{{url('register')}}" class="btn btn-success">Registration
                 </button></a>
         </div>
     </div>
