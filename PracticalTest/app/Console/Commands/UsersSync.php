@@ -29,21 +29,9 @@ class UsersSync extends Command
      */
     public function handle()
     {
-        // $process = new Process(['php', 'artisan', 'queue:work']);
-        // $process->setTimeout(60); // Set the timeout as needed
-
-        // try {
-        //     $process->run();
-        // } catch (ProcessFailedException $exception) {
-        //     // Handle any process execution errors
-        //     $this->error('Failed to run queue worker: ' . $exception->getMessage());
-        //     return;
-        // }
-
-        // // Process output, if needed
-        // $output = $process->getOutput();
-
-        // return $output;
         dispatch(new JobsSync());
+        $this->call('queue:work', [
+            '--once' => true
+        ]);
     }
 }

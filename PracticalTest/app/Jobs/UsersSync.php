@@ -34,8 +34,6 @@ class UsersSync implements ShouldQueue
     {
         $user = User::with('reseller', 'supplier')->get()->toArray();
 
-        $key = 0;
-        $newArray = [];
         $userDataModify =   array_map(function ($item) {
             if ($item['role_type'] === 'Supplier') {
                 $item['contact_no'] = $item['supplier']['contact_no'];
